@@ -101,6 +101,11 @@ module.exports = g;
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data () {
@@ -397,12 +402,30 @@ describe('Counter', () => {
         __WEBPACK_IMPORTED_MODULE_2_expect___default()(wrapper.vm.count).toBe(0);
     });
 
-    it ('increments the count when the button is clicked', () => {
+    it ('increments the count when the increment button is clicked', () => {
         __WEBPACK_IMPORTED_MODULE_2_expect___default()(wrapper.vm.count).toBe(0);
 
-        wrapper.find('button').trigger('click');
+        wrapper.find('.increment').trigger('click');
 
         __WEBPACK_IMPORTED_MODULE_2_expect___default()(wrapper.vm.count).toBe(1);
+    });
+
+    it ('decrements the count when the decrement button is clicked', () => {
+        wrapper.setData({ count: 5 });
+
+        wrapper.find('.decrement').trigger('click');
+
+        __WEBPACK_IMPORTED_MODULE_2_expect___default()(wrapper.vm.count).toBe(4);
+    });
+
+    it ('never goes below 0', () => {
+        __WEBPACK_IMPORTED_MODULE_2_expect___default()(wrapper.vm.count).toBe(0);
+
+        __WEBPACK_IMPORTED_MODULE_2_expect___default()(wrapper.find('.decrement').hasStyle('display', 'none')).toBe(true);
+
+        wrapper.find('.increment').trigger('click');
+
+        __WEBPACK_IMPORTED_MODULE_2_expect___default()(wrapper.find('.decrement').hasStyle('display', 'none')).toBe(false);
     });
 
     it ('presents the current count', () => {
@@ -488,6 +511,7 @@ var render = function() {
     _c(
       "button",
       {
+        staticClass: "increment",
         on: {
           click: function($event) {
             _vm.count++
@@ -495,6 +519,27 @@ var render = function() {
         }
       },
       [_vm._v("Increment")]
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.count > 0,
+            expression: "count > 0"
+          }
+        ],
+        staticClass: "decrement",
+        on: {
+          click: function($event) {
+            _vm.count--
+          }
+        }
+      },
+      [_vm._v("Decrement")]
     )
   ])
 }
