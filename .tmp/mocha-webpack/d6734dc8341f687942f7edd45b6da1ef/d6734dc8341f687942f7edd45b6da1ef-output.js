@@ -19075,7 +19075,7 @@ module.exports = expect;
 
 
     // This gets replaced by webpack with the updated files on rebuild
-    var __webpackManifest__ = ['./reminders.spec.js'];
+    var __webpackManifest__ = ['!!!../../node_modules/vue-loader/lib/selector?type=script&index=0!./CouponCode.vue', '../src/components/CouponCode.vue', '!!../../node_modules/vue-loader/lib/template-compiler/index?{"id":"data-v-db46803a","hasScoped":false,"optionsId":"0","buble":{"transforms":{}}}!../../node_modules/vue-loader/lib/selector?type=template&index=0!./CouponCode.vue', './CouponCode.spec.js'];
 
     var testsContext = __webpack_require__(9);
 
@@ -19093,6 +19093,7 @@ module.exports = expect;
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
+	"./CouponCode.spec.js": 19,
 	"./counter.spec.js": 10,
 	"./reminders.spec.js": 16
 };
@@ -32943,6 +32944,238 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-c73d847e", { render: render, staticRenderFns: staticRenderFns })
+  }
+}
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_test_utils__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_test_utils___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_test_utils__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_expect__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_expect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_expect__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_components_CouponCode_vue__ = __webpack_require__(21);
+
+
+
+
+describe('CouponCode', () => {
+    let wrapper;
+
+    beforeEach(() => {
+        wrapper = Object(__WEBPACK_IMPORTED_MODULE_0_vue_test_utils__["mount"])(__WEBPACK_IMPORTED_MODULE_2__src_components_CouponCode_vue__["a" /* default */]);
+    });
+
+    it ('accepts a coupon code', () => {
+        __WEBPACK_IMPORTED_MODULE_1_expect___default()(wrapper.contains('input.coupon-code')).toBe(true);
+    });
+
+    it ('validates a real coupon code', () => {
+        enterCouponCode('50OFF');
+
+        __WEBPACK_IMPORTED_MODULE_1_expect___default()(wrapper.html()).toContain('Coupon Redeemed: 50% Off!');
+    });
+
+    it ('validates a fake coupon code', () => {
+        enterCouponCode('NOTREAL');
+
+        __WEBPACK_IMPORTED_MODULE_1_expect___default()(wrapper.html()).toContain('Invalid Coupon Code');
+    });
+
+    it ('broadcasts the percentage discount when a valid coupon code is applied', () => {
+        enterCouponCode('50OFF');
+
+        // wrapper.setData({
+        //     code: '50OFF'
+        // });
+        //
+        // wrapper.vm.validate();
+
+        __WEBPACK_IMPORTED_MODULE_1_expect___default()(wrapper.emitted().applied).toBeTruthy();
+        __WEBPACK_IMPORTED_MODULE_1_expect___default()(wrapper.emitted().applied[0]).toEqual([50]);
+    });
+
+    function enterCouponCode(code) {
+        let couponCode = wrapper.find('input.coupon-code');
+
+        couponCode.element.value = code;
+        couponCode.trigger('input');
+    }
+});
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    data() {
+        return {
+            code: '',
+
+            // In real life, you wouldn't hardcode this coupons array.
+            // Instead, your validate() method would fire an AJAX
+            // request to your server to check if the coupon is real.
+            // To keep the demo simple, we'll hardcode the list.
+            coupons: [
+                {
+                    code: '50OFF',
+                    message: '50% Off!',
+                    discount: 50
+                },
+                {
+                    code: 'FREE',
+                    message: 'Entirely Free!',
+                    discount: 100
+                },
+            ],
+            valid: false
+        };
+    },
+
+    computed: {
+        selectedCoupon() {
+            return this.coupons.find(coupon => coupon.code === this.code);
+        },
+
+        message() {
+            return this.selectedCoupon ? this.selectedCoupon.message : '';
+        },
+
+        feedback () {
+            if (this.valid) {
+                return `Coupon Redeemed: ${this.message}`;
+            }
+            return 'Invalid Coupon Code';
+        }
+    },
+
+    methods: {
+        validate() {
+            // this.valid = this.coupons.map(coupon => coupon.code).includes(this.code);
+            this.valid = !! this.selectedCoupon;
+
+            if (this.valid) {
+                this.$emit('applied', this.selectedCoupon.discount);
+            }
+        }
+    }
+});
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_selector_type_script_index_0_CouponCode_vue__ = __webpack_require__(20);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_db46803a_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_CouponCode_vue__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(2);
+var disposed = false
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+
+var Component = Object(__WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__["a" /* default */])(
+  __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_selector_type_script_index_0_CouponCode_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_db46803a_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_CouponCode_vue__["a" /* render */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_db46803a_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_CouponCode_vue__["b" /* staticRenderFns */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src/components/CouponCode.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-db46803a", Component.options)
+  } else {
+    hotAPI.reload("data-v-db46803a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("input", {
+      directives: [
+        {
+          name: "model",
+          rawName: "v-model",
+          value: _vm.code,
+          expression: "code"
+        }
+      ],
+      staticClass: "coupon-code",
+      attrs: { type: "text" },
+      domProps: { value: _vm.code },
+      on: {
+        input: [
+          function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.code = $event.target.value
+          },
+          _vm.validate
+        ]
+      }
+    }),
+    _vm._v(" "),
+    _c("p", { domProps: { textContent: _vm._s(_vm.feedback) } })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-db46803a", { render: render, staticRenderFns: staticRenderFns })
   }
 }
 
