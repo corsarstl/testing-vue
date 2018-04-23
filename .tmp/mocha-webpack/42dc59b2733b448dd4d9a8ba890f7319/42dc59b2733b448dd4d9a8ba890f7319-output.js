@@ -13839,7 +13839,10 @@ module.exports = {
         expiredText: { default: 'Now Expired' }
     },
     data () {
-        return { now: new Date() };
+        return {
+            now: new Date(),
+            interval: null
+        };
     },
 
     computed: {
@@ -13855,10 +13858,14 @@ module.exports = {
         }
     },
     created () {
-        let interval = setInterval(() => {
+        this.interval = setInterval(() => {
             this.now = new Date();
         }, 1000);
-        this.$on('finished', () => clearInterval(interval));
+        this.$on('finished', () => clearInterval(this.interval));
+    },
+
+    destroyed () {
+        clearInterval(this.interval);
     }
 });
 
@@ -26581,6 +26588,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+
 describe ('Countdown', () => {
     let wrapper, clock;
 
@@ -26603,52 +26611,54 @@ describe ('Countdown', () => {
         see('10 Seconds');
     });
 
-    it ('reduces the countdown every second', (done) => {
+    it ('reduces the countdown every second', async () => {
         see('10 Seconds');
 
         clock.tick(1000);
 
-        assertOnNextTick(() => {
-            see('9 Seconds');
-        }, done);
+        await wrapper.vm.$nextTick();
+
+        see('9 Seconds');
     });
 
-    it ('shows an expired message when the countdown has completed', (done) => {
+    it ('shows an expired message when the countdown has completed', async () => {
         clock.tick(10000);
 
-        assertOnNextTick(() => {
-            see('Now Expired');
-        }, done);
+        await wrapper.vm.$nextTick();
+
+        see('Now Expired');
     });
 
-    it ('shows a custom expired message when the countdown has completed', (done) => {
+    it ('shows a custom expired message when the countdown has completed', async () => {
         wrapper.setProps({ expiredText: 'Contest is over.' });
 
         clock.tick(10000);
 
-        assertOnNextTick(() => {
-            see('Contest is over.');
-        }, done);
+        await wrapper.vm.$nextTick();
+
+        see('Contest is over.');
     });
 
-    it ('broadcasts when the countdown is finished', (done) => {
+    it ('broadcasts when the countdown is finished', async () => {
         clock.tick(10000);
 
-        assertOnNextTick(() => {
-            __WEBPACK_IMPORTED_MODULE_1_expect___default()(wrapper.emitted().finished).toBeTruthy();
-        }, done);
+        await wrapper.vm.$nextTick();
+
+        __WEBPACK_IMPORTED_MODULE_1_expect___default()(wrapper.emitted().finished).toBeTruthy();
     });
 
-    it ('clears the interval once completed', (done) => {
+    it ('clears the interval once completed', async () => {
         clock.tick(10000);
 
         __WEBPACK_IMPORTED_MODULE_1_expect___default()(wrapper.vm.now.getSeconds()).toBe(10);
 
-        assertOnNextTick(() => {
-            clock.tick(5000);
+        await wrapper.vm.$nextTick();
 
-            __WEBPACK_IMPORTED_MODULE_1_expect___default()(wrapper.vm.now.getSeconds()).toBe(10);
-        }, done);
+        clock.tick(5000);
+
+        await wrapper.vm.$nextTick();
+
+        __WEBPACK_IMPORTED_MODULE_1_expect___default()(wrapper.vm.now.getSeconds()).toBe(10);
     });
 
     // Helper Functions
@@ -26668,18 +26678,6 @@ describe ('Countdown', () => {
 
     let click = selector => {
         wrapper.find(selector).trigger('click');
-    };
-
-    let assertOnNextTick = (callback, done) => {
-        wrapper.vm.$nextTick(() => {
-            try {
-                callback();
-
-                done();
-            } catch (e) {
-                done(e);
-            }
-        });
     };
 });
 
